@@ -1,26 +1,37 @@
-#  Как работать с репозиторием финального задания
+### Kittygram 
+## Описание
+Kittygram — это веб-приложение для публикации фотографий кошек, их описаний и достижений.
+## Технологии
+- Python 3.12
+- Django + Django REST Framework
+- PostgreSQL
+- Docker + Docker Compose
+- Nginx
+- Gunicorn
+- GitHub Actions (CI/CD)
+##Проекты доступны онлайн:
 
-## Что нужно сделать
+- Kittygram:  
+  https://wwwteam.work.gd  
+- Taski:  
+  https://wwwteam.redirectme.net 
+## Установка и запуск
+# Клонировать репозиторий
+git clone https://github.com/<ваш_логин>/kittygram_final.git
+cd kittygram_final
+# Создайте файл .env в корне проекта
+POSTGRES_DB=django
+POSTGRES_USER=django_user
+POSTGRES_PASSWORD=your_password
+DB_HOST=db
+DB_PORT=5432
+SECRET_KEY=your_secret_key
+# Запуск контейнера 
+docker compose up -d --build
+# Сбор статики 
+docker compose exec backend python manage.py migrate
+docker compose exec backend python manage.py collectstatic --noinput
+## Примеры запросов к API:
+>GET — возвращает все подписки пользователя, сделавшего запрос. Возможен поиск по подпискам по параметру search.
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
-
-## Как проверить работу с помощью автотестов
-
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (https://доменное_имя) на ваш проект Kittygram
-taski_domain: полная ссылка (https://доменное_имя) на ваш проект Taski
-dockerhub_username: ваш_логин_на_докерхабе
-```
-
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
-
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
-
-## Чек-лист для проверки перед отправкой задания
-
-- Проект Taski доступен по доменному имени, указанному в `tests.yml`.
-- Проект Kittygram доступен по доменному имени, указанному в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+>POST — подписать пользователя, сделавшего запрос на пользователя, переданного в теле запроса. При попытке подписаться на самого себя, пользователь должен получить информативное сообщение об ошибке. Проверка должна осуществляться на уровне API.
